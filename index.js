@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
 
+const http = require('http');
+const server = http.createServer(app);
 
 require('dotenv').config();
 
@@ -41,7 +43,7 @@ app.get('/', function (req, res) {
 })
 
 
-const io = require("socket.io")(process.env.RTCPORT || 8183, {
+const io = require("socket.io")(server, {
     cors: {
         origin: '*'
     }
@@ -105,7 +107,7 @@ io.on('connection', (socket) => {
 
 
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
 
