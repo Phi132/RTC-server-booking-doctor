@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
+
+
 require('dotenv').config();
 
 let port = process.env.PORT || 1234;
@@ -33,6 +35,12 @@ app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '100mb' }));
 
 
+
+app.get('/', function (req, res) {
+    res.send('Welcome to Real Time Communtication server');
+})
+
+
 const io = require("socket.io")(process.env.RTCPORT || 8183, {
     cors: {
         origin: '*'
@@ -62,7 +70,7 @@ io.on('connection', (socket) => {
         obj.socketId = socket.id;
         listOnlineUser.push(obj);
         io.emit("DANH_SACH_ONLINE", listOnlineUser);
-        
+
         if (dataUser.roleid === 'R4') {
             const isExistConsultant = listOnlineConsultant.some(e => e.idConsultant === dataUser.id);
             if (isExistConsultant) {
